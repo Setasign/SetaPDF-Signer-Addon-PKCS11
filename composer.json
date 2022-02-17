@@ -1,0 +1,28 @@
+{
+    "name": "setasign/setapdf-signer-addon-pkcs11",
+    "description": "A SetaPDF-Signer component signature add-on for accessing keys through the PKCS11 interface.",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "homepage": "https://github.com/Setasign/SetaPDF-Signer-Addon-PKCS11",
+    "authors": [
+        {
+            "name": "Setasign GmbH & Co. KG",
+            "email": "support@setasign.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "setasign/setapdf-signer": "^2.38.3.1671"
+    },
+    "autoload": {
+        "psr-4": {
+            "setasign\\SetaPDF\\Signer\\Module\\Pkcs11\\": "src"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://www.setasign.com/downloads/"
+        }
+    ]
+}
