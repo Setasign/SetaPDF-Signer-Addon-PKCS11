@@ -1,25 +1,24 @@
 <?php
 
+/**
+ * @copyright Copyright (c) 2022 Setasign GmbH & Co. KG (https://www.setasign.com)
+ * @license   http://opensource.org/licenses/mit-license The MIT License
+ */
+
+declare(strict_types=1);
+
 namespace setasign\SetaPDF\Signer\Module\Pkcs11;
 
-use SetaPDF_Core_Reader_FilePath;
-use SetaPDF_Core_Type_Dictionary;
-use SetaPDF_Signer_Signature_DictionaryInterface;
-use SetaPDF_Signer_Signature_DocumentInterface;
-use SetaPDF_Signer_Signature_Module_ModuleInterface;
-use SetaPDF_Signer_Signature_Module_Pades;
-use SetaPDF_Core_Document as Document;
 use SetaPDF_Signer_Asn1_Element as Asn1Element;
 use SetaPDF_Signer_Asn1_Oid as Asn1Oid;
 use SetaPDF_Signer_Digest as Digest;
-use SetaPDF_Signer_Exception;
 
 class Module implements
-    SetaPDF_Signer_Signature_Module_ModuleInterface,
-    SetaPDF_Signer_Signature_DictionaryInterface,
-    SetaPDF_Signer_Signature_DocumentInterface
+    \SetaPDF_Signer_Signature_Module_ModuleInterface,
+    \SetaPDF_Signer_Signature_DictionaryInterface,
+    \SetaPDF_Signer_Signature_DocumentInterface
 {
-    protected SetaPDF_Signer_Signature_Module_Pades $padesModule;
+    protected \SetaPDF_Signer_Signature_Module_Pades $padesModule;
 
     protected \Pkcs11\Key $privateKey;
 
@@ -32,7 +31,7 @@ class Module implements
      */
     public function __construct(\Pkcs11\Key $privateKey = null)
     {
-        $this->padesModule = new SetaPDF_Signer_Signature_Module_Pades();
+        $this->padesModule = new \SetaPDF_Signer_Signature_Module_Pades();
 
         if ($privateKey !== null) {
             $this->setPrivateKey($privateKey);
@@ -43,7 +42,7 @@ class Module implements
      * @param \Pkcs11\Key $privateKey
      * @return void
      */
-    public function setPrivateKey(\Pkcs11\Key $privateKey)
+    public function setPrivateKey(\Pkcs11\Key $privateKey): void
     {
         $attributes = $privateKey->getAttributeValue([
             \Pkcs11\CKA_PRIVATE,
@@ -73,16 +72,22 @@ class Module implements
     }
 
     /**
-     * @param $certificate
+     * Set the signing certificate.
+     *
+     * @param string|\SetaPDF_Signer_X509_Certificate $certificate PEM encoded certificate, path to the PEM encoded
+     *                                                            certificate or a certificate instance.
+     * @throws \InvalidArgumentException
      * @throws \SetaPDF_Signer_Asn1_Exception
      */
-    public function setCertificate($certificate)
+    public function setCertificate($certificate): void
     {
         $this->padesModule->setCertificate($certificate);
     }
 
     /**
-     * @return \SetaPDF_Signer_X509_Certificate|string
+     * Get the certificate value.
+     *
+     * @return string|\SetaPDF_Signer_X509_Certificate
      */
     public function getCertificate()
     {
@@ -93,9 +98,9 @@ class Module implements
      * Set the digest algorithm to use when signing.
      *
      * @param string $digest Allowed values are sha256, sha386, sha512
-     * @see SetaPDF_Signer_Signature_Module_Pades::setDigest()
+     * @see \SetaPDF_Signer_Signature_Module_Pades::setDigest()
      */
-    public function setDigest($digest)
+    public function setDigest(string $digest): void
     {
         $this->padesModule->setDigest($digest);
     }
@@ -105,7 +110,7 @@ class Module implements
      *
      * @return string
      */
-    public function getDigest()
+    public function getDigest(): string
     {
         return $this->padesModule->getDigest();
     }
@@ -117,7 +122,7 @@ class Module implements
      *                                                                 certificates.
      * @throws \SetaPDF_Signer_Asn1_Exception
      */
-    public function setExtraCertificates($extraCertificates)
+    public function setExtraCertificates($extraCertificates): void
     {
         $this->padesModule->setExtraCertificates($extraCertificates);
     }
@@ -126,9 +131,9 @@ class Module implements
      * Adds an OCSP response which will be embedded in the CMS structure.
      *
      * @param string|\SetaPDF_Signer_Ocsp_Response $ocspResponse DER encoded OCSP response or OCSP response instance.
-     * @throws SetaPDF_Signer_Exception
+     * @throws \SetaPDF_Signer_Exception
      */
-    public function addOcspResponse($ocspResponse)
+    public function addOcspResponse($ocspResponse): void
     {
         $this->padesModule->addOcspResponse($ocspResponse);
     }
@@ -138,15 +143,16 @@ class Module implements
      *
      * @param string|\SetaPDF_Signer_X509_Crl $crl
      */
-    public function addCrl($crl)
+    public function addCrl($crl): void
     {
         $this->padesModule->addCrl($crl);
     }
 
     /**
      * @inheritDoc
+     * @throws \SetaPDF_Signer_Exception
      */
-    public function updateSignatureDictionary(SetaPDF_Core_Type_Dictionary $dictionary)
+    public function updateSignatureDictionary(\SetaPDF_Core_Type_Dictionary $dictionary): void
     {
         $this->padesModule->updateSignatureDictionary($dictionary);
     }
@@ -154,7 +160,7 @@ class Module implements
     /**
      * @inheritDoc
      */
-    public function updateDocument(Document $document)
+    public function updateDocument(\SetaPDF_Core_Document $document): void
     {
         $this->padesModule->updateDocument($document);
     }
@@ -163,9 +169,9 @@ class Module implements
      * Get the complete Cryptographic Message Syntax structure.
      *
      * @return Asn1Element
-     * @throws SetaPDF_Signer_Exception
+     * @throws \SetaPDF_Signer_Exception
      */
-    public function getCms()
+    public function getCms(): Asn1Element
     {
         return $this->padesModule->getCms();
     }
@@ -185,6 +191,8 @@ class Module implements
     }
 
     /**
+     * Get whether PSS or PKCSV1_5 padding is used with RSA keys.
+     *
      * @return bool
      */
     public function getPssPadding(): bool
@@ -193,11 +201,11 @@ class Module implements
     }
 
     /**
-     * @param SetaPDF_Core_Reader_FilePath $tmpPath
-     * @return Asn1Element
-     * @throws SetaPDF_Signer_Exception
+     * @param \SetaPDF_Core_Reader_FilePath $tmpPath
+     * @return string
+     * @throws \SetaPDF_Signer_Exception
      */
-    public function createSignature(SetaPDF_Core_Reader_FilePath $tmpPath)
+    public function createSignature(\SetaPDF_Core_Reader_FilePath $tmpPath): string
     {
         $hashData = $this->padesModule->getDataToSign($tmpPath);
         $digest = $this->padesModule->getDigest();
@@ -291,6 +299,7 @@ class Module implements
                 ));
 
             } else {
+                // PKCSV1_5 padding
                 switch ($digest) {
                     case Digest::SHA_256:
                         $mechanism = new \Pkcs11\Mechanism(\Pkcs11\CKM_SHA256_RSA_PKCS);
@@ -307,7 +316,7 @@ class Module implements
             }
 
         } elseif ($this->keyType === \Pkcs11\CKK_EC) {
-            $hashData = hash($digest, $hashData, true);
+            $hashData = \hash($digest, $hashData, true);
             $mechanism = new \Pkcs11\Mechanism(\Pkcs11\CKM_ECDSA);
         } else {
             throw new Exception('Unsupported key type.');
@@ -339,6 +348,6 @@ class Module implements
 
         $this->padesModule->setSignatureValue($signatureValue);
 
-        return $this->getCms();
+        return (string) $this->getCms();
     }
 }
