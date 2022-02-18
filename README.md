@@ -20,7 +20,7 @@ Add following to your composer.json:
 
     {
         "require": {
-            "setasign/setapdf-signer-addon-pkcs11": "dev-master"
+            "setasign/setapdf-signer-addon-pkcs11": "^1.0"
         },
         "repositories": [
             {
@@ -33,6 +33,23 @@ Add following to your composer.json:
 and execute `composer update`. You need to define the `repository` to evaluate the dependency to the
 [SetaPDF-Signer](https://www.setasign.com/signer) component
 (see [here](https://getcomposer.org/doc/faqs/why-can%27t-composer-load-repositories-recursively.md) for more details).
+
+### Trial version
+
+By default, this packages depends on a licensed version of [SetaPDF-Signer](https://www.setasign.com/signer)
+component. If you want to use it with a trial version please use following in your composer.json:
+
+    {
+        "require": {
+            "setasign/setapdf-signer-addon-pkcs11": "dev-trial"
+        },
+        "repositories": [
+            {
+                "type": "composer",
+                "url": "https://www.setasign.com/downloads/"
+            }
+        ]
+    }
 
 ## Usage
 
