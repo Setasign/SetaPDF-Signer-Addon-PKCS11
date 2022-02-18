@@ -28,9 +28,9 @@ $skey = $session->findObjects([
 ])[0];
 
 $module = new Module($skey);
-//$pkcs11Module->setCertificate(__DIR__ . '/assets/setapdf.pem');
-$module->setCertificate(__DIR__ . '/assets/setapdf-ec-no-pw.pem');
-//$pkcs11Module->setPssPadding();
+$module->setCertificate(__DIR__ . '/assets/setapdf.pem');
+//$module->setCertificate(__DIR__ . '/assets/setapdf-ec-no-pw.pem');
+$module->setPssPadding();
 $module->setDigest(SetaPDF_Signer_Digest::SHA_512);
 
 // create a writer instance
