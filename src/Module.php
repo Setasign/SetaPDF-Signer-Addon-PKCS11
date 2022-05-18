@@ -50,15 +50,26 @@ class Module implements
             \Pkcs11\CKA_KEY_TYPE
         ]);
 
-        if ($attributes[\Pkcs11\CKA_PRIVATE] !== "\x01") {
+        // note: before php-pkcs11 v1.1 the attribute types were always strings
+        if (!is_bool($attributes[\Pkcs11\CKA_PRIVATE])) {
+            $attributes[\Pkcs11\CKA_PRIVATE] = $attributes[\Pkcs11\CKA_PRIVATE] === "\x01";
+        }
+        if (!is_bool($attributes[\Pkcs11\CKA_SIGN])) {
+            $attributes[\Pkcs11\CKA_SIGN] = $attributes[\Pkcs11\CKA_SIGN] === "\x01";
+        }
+        if (!is_int($attributes[\Pkcs11\CKA_KEY_TYPE])) {
+            $attributes[\Pkcs11\CKA_KEY_TYPE] = \current(\unpack('P', $attributes[\Pkcs11\CKA_KEY_TYPE]));
+        }
+        
+        if (!$attributes[\Pkcs11\CKA_PRIVATE]) {
             throw new \InvalidArgumentException('The passed key is not a private key.');
         }
 
-        if ($attributes[\Pkcs11\CKA_SIGN] !== "\x01") {
+        if (!$attributes[\Pkcs11\CKA_SIGN]) {
             throw new \InvalidArgumentException('Signing is not allowed with this key.');
         }
 
-        $this->keyType = \current(\unpack('P', $attributes[\Pkcs11\CKA_KEY_TYPE]));
+        $this->keyType = $attributes[\Pkcs11\CKA_KEY_TYPE];
 
         switch ($this->keyType) {
             case \Pkcs11\CKK_RSA:
