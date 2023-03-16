@@ -8,10 +8,10 @@
     "packages": [
         {
             "name": "setasign/setapdf-core",
-            "version": "2.38.3.1671",
+            "version": "2.41.0.1834",
             "dist": {
                 "type": "zip",
-                "url": "https://www.setasign.com/downloads/3351500/SetaPDF-Core_2.38.3.1671-without-demos.zip"
+                "url": "https://www.setasign.com/downloads/4304267/SetaPDF-Core_2.41.0.1834-without-demos.zip"
             },
             "type": "library",
             "autoload": {
@@ -25,17 +25,17 @@
             "support": {
                 "email": "support@setasign.com"
             },
-            "time": "2021-12-06T00:00:00+00:00"
+            "time": "2023-02-21T00:00:00+00:00"
         },
         {
             "name": "setasign/setapdf-signer",
-            "version": "2.38.3.1671",
+            "version": "2.41.0.1834",
             "dist": {
                 "type": "zip",
-                "url": "https://www.setasign.com/downloads/3351511/SetaPDF-Signer_2.38.3.1671-without-core.zip"
+                "url": "https://www.setasign.com/downloads/4304289/SetaPDF-Signer_2.41.0.1834-without-core.zip"
             },
             "require": {
-                "setasign/setapdf-core": "2.38.3.1671"
+                "setasign/setapdf-core": "2.41.0.1834"
             },
             "type": "library",
             "autoload": {
@@ -49,7 +49,7 @@
             "support": {
                 "email": "support@setasign.com"
             },
-            "time": "2021-12-06T00:00:00+00:00"
+            "time": "2023-02-21T00:00:00+00:00"
         }
     ],
     "packages-dev": [],
@@ -62,5 +62,5 @@
         "php": ">=7.4"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
