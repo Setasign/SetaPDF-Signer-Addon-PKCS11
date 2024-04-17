@@ -28,6 +28,11 @@ class Module implements
     protected bool $pssPadding = false;
 
     /**
+     * @var callable
+     */
+    protected $reAuthenticationCallback;
+
+    /**
      * @param \Pkcs11\Key|null $privateKey
      */
     public function __construct(\Pkcs11\Key $privateKey = null)
@@ -124,6 +129,11 @@ class Module implements
     public function getPssPadding(): bool
     {
         return $this->pssPadding;
+    }
+
+    public function setReAuthenticationCallback(?callable $reAuthenticationCallback): void
+    {
+        $this->reAuthenticationCallback = $reAuthenticationCallback;
     }
 
     /**
@@ -249,7 +259,13 @@ class Module implements
             throw new Exception('Unsupported key type.');
         }
 
-        $signatureValue = $this->privateKey->sign($mechanism, $hashData);
+        $signatureContext = $this->privateKey->initializeSignature($mechanism);
+        if (\is_callable($this->reAuthenticationCallback)) {
+            \call_user_func($this->reAuthenticationCallback);
+        }
+
+        $signatureContext->update($hashData);
+        $signatureValue = $signatureContext->finalize();
 
         if ($this->keyType === \Pkcs11\CKK_EC) {
             $len = \strlen($signatureValue);
