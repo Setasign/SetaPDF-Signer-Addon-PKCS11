@@ -11,8 +11,8 @@
         }
     ],
     "require": {
-        "php": ">=7.4",
-        "setasign/setapdf-signer": "^2.44"
+        "php": ">=7.4 <=8.5.99999",
+        "setasign/setapdf-signer": "^2.47"
     },
     "autoload": {
         "psr-4": {
