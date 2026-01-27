@@ -1,6 +1,10 @@
 <?php
 
 use setasign\SetaPDF\Signer\Module\Pkcs11\Module;
+use setasign\SetaPDF2\Core\Document;
+use setasign\SetaPDF2\Core\Writer\HttpWriter;
+use setasign\SetaPDF2\Signer\Digest;
+use setasign\SetaPDF2\Signer\Signer;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -31,15 +35,15 @@ $module = new Module($skey);
 $module->setCertificate(__DIR__ . '/assets/setapdf.pem');
 //$module->setCertificate(__DIR__ . '/assets/setapdf-ec-no-pw.pem');
 $module->setPssPadding();
-$module->setDigest(SetaPDF_Signer_Digest::SHA_512);
+$module->setDigest(Digest::SHA_512);
 
 // create a writer instance
-$writer = new SetaPDF_Core_Writer_Http($resultPath);
+$writer = new HttpWriter($resultPath);
 // create the document instance
-$document = SetaPDF_Core_Document::loadByFilename($fileToSign, $writer);
+$document = Document::loadByFilename($fileToSign, $writer);
 
 // create the signer instance
-$signer = new SetaPDF_Signer($document);
+$signer = new Signer($document);
 $signer->sign($module);
 
 $session->logout();

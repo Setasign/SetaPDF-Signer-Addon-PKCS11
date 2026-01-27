@@ -52,6 +52,14 @@ RSASSA-PSS just call `$module->setPssPadding();`.
 
 A simple complete signature process would look like this:
 
+    <?php
+
+    use setasign\SetaPDF\Signer\Module\Pkcs11\Module;
+    use setasign\SetaPDF2\Core\Document;
+    use setasign\SetaPDF2\Core\Writer\HttpWriter;
+    use setasign\SetaPDF2\Signer\Digest;
+    use setasign\SetaPDF2\Signer\Signer;
+
     $pin = '123456';
     
     $modulePath = '/usr/lib/softhsm/libsofthsm2.so';
@@ -76,12 +84,12 @@ A simple complete signature process would look like this:
     $fileToSign = 'path/to/Laboratory-Report.pdf';
 
     // create a writer instance
-    $writer = new SetaPDF_Core_Writer_Http('signed.pdf');
+    $writer = new HttpWriter('signed.pdf');
     // create the document instance
-    $document = SetaPDF_Core_Document::loadByFilename($fileToSign, $writer);
+    $document = Document::loadByFilename($fileToSign, $writer);
     
     // create the signer instance
-    $signer = new SetaPDF_Signer($document);
+    $signer = new Signer($document);
     $signer->sign($module);
     
     $session->logout();

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright Copyright (c) 2022 Setasign GmbH & Co. KG (https://www.setasign.com)
+ * @copyright Copyright (c) 2026 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
  */
 
@@ -9,17 +9,22 @@ declare(strict_types=1);
 
 namespace setasign\SetaPDF\Signer\Module\Pkcs11;
 
-use SetaPDF_Signer_Asn1_Element as Asn1Element;
-use SetaPDF_Signer_Asn1_Oid as Asn1Oid;
-use SetaPDF_Signer_Digest as Digest;
-use SetaPDF_Signer_Signature_Module_PadesProxyTrait;
+use setasign\SetaPDF2\Core\Reader\FilePath;
+use setasign\SetaPDF2\Signer\Asn1\Element as Asn1Element;
+use setasign\SetaPDF2\Signer\Asn1\Oid as Asn1Oid;
+use setasign\SetaPDF2\Signer\Digest;
+use setasign\SetaPDF2\Signer\Signature\Module\DictionaryInterface;
+use setasign\SetaPDF2\Signer\Signature\Module\DocumentInterface;
+use setasign\SetaPDF2\Signer\Signature\Module\Pades;
+use setasign\SetaPDF2\Signer\Signature\Module\PadesProxyTrait;
+use setasign\SetaPDF2\Signer\Signature\Module\ModuleInterface;
 
 class Module implements
-    \SetaPDF_Signer_Signature_Module_ModuleInterface,
-    \SetaPDF_Signer_Signature_DictionaryInterface,
-    \SetaPDF_Signer_Signature_DocumentInterface
+    ModuleInterface,
+    DictionaryInterface,
+    DocumentInterface
 {
-    use SetaPDF_Signer_Signature_Module_PadesProxyTrait;
+    use PadesProxyTrait;
 
     protected \Pkcs11\Key $privateKey;
 
@@ -35,7 +40,7 @@ class Module implements
     /**
      * @param \Pkcs11\Key|null $privateKey
      */
-    public function __construct(\Pkcs11\Key $privateKey = null)
+    public function __construct(?\Pkcs11\Key $privateKey = null)
     {
         if ($privateKey !== null) {
             $this->setPrivateKey($privateKey);
@@ -90,7 +95,7 @@ class Module implements
      * Set the digest algorithm to use when signing.
      *
      * @param string $digest Allowed values are sha256, sha386, sha512
-     * @see \SetaPDF_Signer_Signature_Module_Pades::setDigest()
+     * @see Pades::setDigest()
      */
     public function setDigest(string $digest): void
     {
@@ -137,11 +142,11 @@ class Module implements
     }
 
     /**
-     * @param \SetaPDF_Core_Reader_FilePath $tmpPath
+     * @param FilePath $tmpPath
      * @return string
-     * @throws \SetaPDF_Signer_Exception
+     * @throws \setasign\SetaPDF2\Signer\Exception
      */
-    public function createSignature(\SetaPDF_Core_Reader_FilePath $tmpPath): string
+    public function createSignature(FilePath $tmpPath): string
     {
         $module = $this->_getPadesModule();
         $hashData = $module->getDataToSign($tmpPath);
