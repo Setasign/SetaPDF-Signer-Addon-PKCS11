@@ -11,7 +11,7 @@ extension to be installed.
 
 You also need to provide the path to the PKCS11 module of your device.
 
-The package is developed and tested on PHP >= 7.4. Requirements of the [SetaPDF-Signer](https://www.setasign.com/signer)
+The package is developed and tested on PHP >= 7.4 up to PHP 8.5 (PKCS11 PHP extension compiled from _master_; 2026-01-27). Requirements of the [SetaPDF-Signer](https://www.setasign.com/signer)
 component can be found [here](https://manuals.setasign.com/setapdf-signer-manual/getting-started/#index-1).
 
 ## Installation
