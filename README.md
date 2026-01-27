@@ -20,7 +20,7 @@ Add following to your composer.json:
 
     {
         "require": {
-            "setasign/setapdf-signer-addon-pkcs11": "^1.0"
+            "setasign/setapdf-signer-addon-pkcs11": "^1.1"
         },
         "repositories": [
             {
